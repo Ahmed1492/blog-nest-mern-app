@@ -67,8 +67,9 @@ Admins can **leverage Google Gemini AI** to auto-generate blog content, speeding
 
 ---
 
-## 🎥 Demo
-
+##  Demo
+- 🔴 **Live Demo:** [Live Demo](https://blog-nest-ecru.vercel.app/)
+  
 ---
 
 ## 👤 User Features
