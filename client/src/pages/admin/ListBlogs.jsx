@@ -9,7 +9,11 @@ const ListBlogs = () => {
   const { backEndUrl, token } = useAppContext();
   const fetchBlogs = async () => {
     try {
-      let myResposne = await axios.get(`${backEndUrl}/api/blog/admin-blogs`);
+      let myResposne = await axios.get(`${backEndUrl}/api/blog/admin-blogs`, {
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+        },
+      });
 
       console.log(myResposne.data);
       if (myResposne.data.success) {
@@ -32,8 +36,9 @@ const ListBlogs = () => {
         {
           headers: {
             Authorization: token,
+            "ngrok-skip-browser-warning": "true",
           },
-        }
+        },
       );
       console.log(myResposne.data);
       if (myResposne.data.success) {
@@ -57,8 +62,9 @@ const ListBlogs = () => {
         {
           headers: {
             Authorization: token,
+            "ngrok-skip-browser-warning": "true",
           },
-        }
+        },
       );
       console.log(myResposne.data);
       if (myResposne.data.success) {

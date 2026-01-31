@@ -37,8 +37,10 @@ const AddBlog = () => {
         {
           headers: {
             Authorization: token,
+
+            "ngrok-skip-browser-warning": "true",
           },
-        }
+        },
       );
       console.log(myResponse.data);
       if (myResponse.data.success) {
@@ -67,9 +69,17 @@ const AddBlog = () => {
     if (!title) return toast.error("please enter a title first");
     try {
       setLoading(true);
-      let myResponse = await axios.post(`${backEndUrl}/api/blog/generate`, {
-        prompt: title,
-      });
+      let myResponse = await axios.post(
+        `${backEndUrl}/api/blog/generate`,
+        {
+          prompt: title,
+        },
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        },
+      );
       if (myResponse.data.success) {
         quillRef.current.root.innerHTML = parse(myResponse.data.content);
       } else {

@@ -19,7 +19,12 @@ const BlogComments = ({ backEndUrl, id }) => {
     try {
       let myResponse = await axios.post(
         `${backEndUrl}/api/comment/blog-comments`,
-        { blog: id }
+        { blog: id },
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        },
       );
       console.log(myResponse.data);
       if (myResponse.data.success) {
@@ -39,11 +44,19 @@ const BlogComments = ({ backEndUrl, id }) => {
       return toast.error("All feilds Required");
     }
     try {
-      let myResponse = await axios.post(`${backEndUrl}/api/comment/add`, {
-        name,
-        content: comment,
-        blog: id,
-      });
+      let myResponse = await axios.post(
+        `${backEndUrl}/api/comment/add`,
+        {
+          name,
+          content: comment,
+          blog: id,
+        },
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        },
+      );
       console.log(myResponse.data);
       if (myResponse.data.success) {
         toast.success(myResponse.data.message);

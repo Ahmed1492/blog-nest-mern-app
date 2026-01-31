@@ -16,7 +16,11 @@ export const AppProvider = ({ children }) => {
 
   const fetchBlogs = async () => {
     try {
-      let myResposne = await axios.get(`${backEndUrl}/api/blog/`);
+      let myResposne = await axios.get(`${backEndUrl}/api/blog/`, {
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+        },
+      });
 
       // console.log(myResposne.data);
       if (myResposne.data.success) {
@@ -47,7 +51,6 @@ export const AppProvider = ({ children }) => {
     if (token) {
       setToken(token);
     }
-
   }, [path]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

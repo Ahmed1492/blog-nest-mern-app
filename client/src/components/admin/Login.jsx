@@ -16,7 +16,12 @@ const Login = () => {
     try {
       let myResponse = await axios.post(
         `${backEndUrl}/api/admin/login`,
-        userData
+        userData,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        },
       );
       console.log(myResponse.data);
 

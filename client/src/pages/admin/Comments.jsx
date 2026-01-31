@@ -17,8 +17,9 @@ const Comments = () => {
         {
           headers: {
             Authorization: token,
+            "ngrok-skip-browser-warning": "true",
           },
-        }
+        },
       );
 
       console.log(myResposne.data);
@@ -42,8 +43,9 @@ const Comments = () => {
         {
           headers: {
             Authorization: token,
+            "ngrok-skip-browser-warning": "true",
           },
-        }
+        },
       );
       console.log(myResposne.data);
       if (myResposne.data.success) {
@@ -65,8 +67,9 @@ const Comments = () => {
         {
           headers: {
             Authorization: token,
+            "ngrok-skip-browser-warning": "true",
           },
-        }
+        },
       );
 
       console.log(myResponse.data);

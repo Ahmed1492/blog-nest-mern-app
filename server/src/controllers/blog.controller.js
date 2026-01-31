@@ -1,7 +1,6 @@
 import main from "../../config/gemini.js";
-import imagekit from "../../config/imageKit.js";
 import Blog from "../../db/models/blog.model.js";
-import fs from "fs";
+
 
 export const createBlog = async (req, res) => {
   try {
@@ -16,27 +15,8 @@ export const createBlog = async (req, res) => {
       return res.json({ success: false, message: "Image is required" });
     }
 
-    const imageFile = req.file;
-
-    // ⭐ NEW SDK → upload using ReadStream
-    const upload = await imagekit.files.upload({
-      file: fs.createReadStream(imageFile.path),
-      fileName: imageFile.originalname,
-      folder: "/blogs",
-    });
-
-    // ⭐ NEW SDK → optimized URL using helper.buildSrc
-    const optimizedImageUrl = imagekit.helper.buildSrc({
-      urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
-      src: upload.filePath,
-      transformation: [
-        {
-          width: 1280,
-          format: "webp",
-          quality: "auto",
-        },
-      ],
-    });
+    // 🌤 Cloudinary gives URL directly
+    const imageUrl = req.file.path;
 
     const blog = await Blog.create({
       title,
@@ -44,7 +24,7 @@ export const createBlog = async (req, res) => {
       description,
       category,
       isPublished,
-      image: optimizedImageUrl,
+      image: imageUrl,
     });
 
     return res.json({ success: true, message: "Blog created!", blog });
@@ -53,6 +33,16 @@ export const createBlog = async (req, res) => {
     return res.json({ success: false, err: error.message });
   }
 };
+
+
+
+
+
+
+
+
+
+
 
 
 export const getBlogs = async (req, res, next) => {

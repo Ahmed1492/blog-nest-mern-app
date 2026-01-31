@@ -17,7 +17,11 @@ const Blog = () => {
   const getBlogData = async () => {
     setError(false);
     try {
-      let myBlog = await axios.get(`${backEndUrl}/api/blog/${id}`);
+      let myBlog = await axios.get(`${backEndUrl}/api/blog/${id}`, {
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+        },
+      });
       // console.log(myBlog.data.blog);
       console.log(myBlog.data);
       if (myBlog.data.success) {

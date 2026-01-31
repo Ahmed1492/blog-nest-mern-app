@@ -14,8 +14,9 @@ const Dashboard = () => {
         {
           headers: {
             Authorization: token,
+            "ngrok-skip-browser-warning": "true",
           },
-        }
+        },
       );
 
       console.log(myResposne.data);
@@ -39,8 +40,9 @@ const Dashboard = () => {
         {
           headers: {
             Authorization: token,
+            "ngrok-skip-browser-warning": "true",
           },
-        }
+        },
       );
       console.log(myResposne.data);
       if (myResposne.data.success) {
@@ -64,8 +66,9 @@ const Dashboard = () => {
         {
           headers: {
             Authorization: token,
+            "ngrok-skip-browser-warning": "true",
           },
-        }
+        },
       );
       console.log(myResposne.data);
       if (myResposne.data.success) {

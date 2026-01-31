@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { createBlog, getBlogs, getBlogById, deleteBlogById, togglePublish, getBlogsAdmin, generateContent } from "../controllers/blog.controller.js";
-import upload from "../middleware/multer.js";
 import isAuth from "../middleware/auth.js";
+import upload from "../middleware/multer.js";
 
 const router = Router();
 
