@@ -27,6 +27,18 @@ Admins can **leverage Google Gemini AI** to auto-generate blog content, speeding
 - Upload images for posts  
 - Manage entire content from dashboard  
 
+
+
+---
+
+## 🎥 Demo  
+
+[![Live Demo](https://img.shields.io/badge/View%20Live-Vercel-blue?style=for-the-badge&logo=vercel)](https://blog-nest-ecru.vercel.app/)
+
+---
+
+
+
 ### Core Features
 - Rich content rendering using Markdown  
 - SEO-friendly blog URLs via slugs  
