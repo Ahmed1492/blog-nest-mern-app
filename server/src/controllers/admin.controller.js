@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import 'dotenv/config';
 import Blog from "../../db/models/blog.model.js";
 import Comment from "../../db/models/comment.model.js";
+import { connectDB } from "../../db/connection.js";
 
 
 const generateToken = async (email) => {
@@ -30,6 +31,7 @@ export const adminLogin = async (req, res, next) => {
 
 export const getDashboard = async (req, res, next) => {
   try {
+    await connectDB();
     const recentBlogs = await Blog.find({}).limit(5).sort({ createdAt: -1 });
     const blogs = await Blog.countDocuments();
     const comments = await Comment.countDocuments();

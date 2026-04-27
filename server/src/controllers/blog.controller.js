@@ -1,9 +1,11 @@
 import main from "../../config/gemini.js";
 import Blog from "../../db/models/blog.model.js";
+import { connectDB } from "../../db/connection.js";
 
 
 export const createBlog = async (req, res) => {
   try {
+    await connectDB();
     const { title, subTitle, description, category, isPublished } =
       JSON.parse(req.body.blog);
 
@@ -47,6 +49,7 @@ export const createBlog = async (req, res) => {
 
 export const getBlogs = async (req, res, next) => {
   try {
+    await connectDB();
     let blogs = await Blog.find({ isPublished: true });
     return res.json({ success: true, blogs });
   } catch (error) {
@@ -58,6 +61,7 @@ export const getBlogs = async (req, res, next) => {
 
 export const getBlogsAdmin = async (req, res, next) => {
   try {
+    await connectDB();
     let blogs = await Blog.find({}).sort({ createdAt: -1 });
     return res.json({ success: true, blogs });
   } catch (error) {
@@ -70,6 +74,7 @@ export const getBlogsAdmin = async (req, res, next) => {
 
 export const getBlogById = async (req, res) => {
   try {
+    await connectDB();
     const { id } = req.params;
 
     let blog = await Blog.findById(id);
@@ -89,6 +94,7 @@ export const getBlogById = async (req, res) => {
 
 export const deleteBlogById = async (req, res) => {
   try {
+    await connectDB();
     const { id } = req.body;
 
     let blog = await Blog.findByIdAndDelete(id);
@@ -107,6 +113,7 @@ export const deleteBlogById = async (req, res) => {
 
 export const togglePublish = async (req, res) => {
   try {
+    await connectDB();
     const { id } = req.body;
 
     let blog = await Blog.findById(id);

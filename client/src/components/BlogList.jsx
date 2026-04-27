@@ -1,62 +1,153 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import BlogCard from "./BlogCard";
-import { blog_data } from "../assets/assets";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAppContext } from "../context/AppContext";
+import { BlogListSkeleton } from "./Loader";
 
 const BlogList = () => {
   const filters = ["All", "Technology", "Startup", "Lifestyle", "Finance"];
-  const [currentLink, setCurrentLink] = useState("All");
+  const [currentFilter, setCurrentFilter] = useState("All");
+  const [isLoading, setIsLoading] = useState(true);
 
   const { blogs, input } = useAppContext();
 
-  const filterBlogs = () => {
-    if (input === "") return blogs;
+  useEffect(() => {
+    // Simulate loading state
+    if (blogs.length > 0) {
+      setIsLoading(false);
+    }
+  }, [blogs]);
 
-    return blogs.filter(
-      (blog) =>
-        blog.title.toLowerCase().includes(input.toLowerCase()) ||
-        blog.category.toLowerCase().includes(input.toLowerCase())
-    );
+  const filterBlogs = () => {
+    let filtered = blogs;
+
+    if (input !== "") {
+      filtered = filtered.filter(
+        (blog) =>
+          blog.title.toLowerCase().includes(input.toLowerCase()) ||
+          blog.category.toLowerCase().includes(input.toLowerCase())
+      );
+    }
+
+    if (currentFilter !== "All") {
+      filtered = filtered.filter((blog) => blog.category === currentFilter);
+    }
+
+    return filtered;
   };
 
-  useEffect(() => {
-    // fetchBlogs();
-  }, []);
+  const filtered = filterBlogs();
+
+  if (isLoading) {
+    return (
+      <section className="py-20 px-4 bg-gradient-to-b from-white to-gray-50/50">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-12"
+          >
+            <div className="section-divider" />
+            <h2 className="text-4xl font-bold text-gray-900 mb-3">
+              Latest <span className="gradient-text">Articles</span>
+            </h2>
+            <p className="text-gray-500 text-base max-w-2xl mx-auto">
+              Loading amazing content for you...
+            </p>
+          </motion.div>
+          <BlogListSkeleton />
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <div>
-      <div className="flex items-center justify-center gap-2 relative my-10">
-        {filters.map((filter, index) => (
-          <div key={index} className="relative">
+    <section className="py-20 px-4 bg-gradient-to-b from-white to-gray-50/50">
+      <div className="max-w-7xl mx-auto">
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12"
+        >
+          <div className="section-divider" />
+          <h2 className="text-4xl font-bold text-gray-900 mb-3">
+            Latest <span className="gradient-text">Articles</span>
+          </h2>
+          <p className="text-gray-500 text-base max-w-2xl mx-auto">
+            Explore our most recent posts across all categories
+          </p>
+        </motion.div>
+
+        {/* Filter pills */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="flex items-center justify-center gap-2 flex-wrap mb-12"
+        >
+          {filters.map((filter) => (
             <button
-              onClick={() => setCurrentLink(filter)}
-              className={`relative cursor-pointer text-gray-500 text-sm px-3.5 py-2 font-medium ${
-                currentLink === filter && "text-white"
+              key={filter}
+              onClick={() => setCurrentFilter(filter)}
+              className={`relative px-5 py-2 text-sm font-medium rounded-full transition-all duration-200 ${
+                currentFilter === filter
+                  ? "text-white bg-primary shadow-sm shadow-primary/30"
+                  : "text-gray-600 bg-white border border-gray-200 hover:border-primary/30 hover:text-primary"
               }`}
             >
               {filter}
-              {currentLink === filter && (
-                <motion.div
-                  layoutId="activeBackground"
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  className="absolute left-0 right-0 top-0 h-full bg-primary rounded-full -z-10 "
-                />
-              )}
             </button>
-          </div>
-        ))}
+          ))}
+        </motion.div>
+
+        {/* Blog grid */}
+        <AnimatePresence mode="wait">
+          {filtered.length === 0 ? (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-center py-24"
+            >
+              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <p className="text-lg font-medium text-gray-700 mb-1">No blogs found</p>
+              <p className="text-sm text-gray-400">Try a different search or category</p>
+            </motion.div>
+          ) : (
+            <motion.div
+              key={currentFilter + input}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              {filtered.map((blog, index) => (
+                <motion.div
+                  key={blog._id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.4, delay: index * 0.05 }}
+                >
+                  <BlogCard blog={blog} />
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-      <div className="w-[84%] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
-        {filterBlogs().map((blog, index) => {
-          if (currentLink === blog.category || currentLink === "All")
-            return (
-              <React.Fragment key={index}>
-                <BlogCard blog={blog} index={index} />
-              </React.Fragment>
-            );
-        })}
-      </div>
-    </div>
+    </section>
   );
 };
 

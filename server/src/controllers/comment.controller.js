@@ -1,8 +1,10 @@
 import Comment from "../../db/models/comment.model.js";
 import Blog from "../../db/models/blog.model.js";
+import { connectDB } from "../../db/connection.js";
 
 export const addComment = async (req, res, next) => {
   try {
+    await connectDB();
     const { blog, name, content } = req.body;
     if (!blog || !name || !content)
       return res.json({ success: false, message: 'All Fields Required.' });
@@ -23,6 +25,7 @@ export const addComment = async (req, res, next) => {
 export const getBlogComments = async (req, res, next) => {
   const { blog } = req.body;
   try {
+    await connectDB();
     const comments = await Comment.find({ blog, isApproved: true }).sort({ createdAt: -1 });
     return res.json({ success: true, comments });
   } catch (error) {
@@ -35,6 +38,7 @@ export const getBlogComments = async (req, res, next) => {
 
 export const getComments = async (req, res, next) => {
   try {
+    await connectDB();
     const comments = await Comment.find({ isApproved: true });
     return res.json({ success: true, comments });
   } catch (error) {
@@ -49,6 +53,7 @@ export const getComments = async (req, res, next) => {
 
 export const getCommentsAdmin = async (req, res, next) => {
   try {
+    await connectDB();
     const comments = await Comment.find({}).populate('blog').sort({ createdAt: -1 });
     return res.json({ success: true, comments });
   } catch (error) {
@@ -62,6 +67,7 @@ export const getCommentsAdmin = async (req, res, next) => {
 
 export const deleteCommentById = async (req, res, next) => {
   try {
+    await connectDB();
     const { id } = req.params;
     const checkComment = await Comment.findById(id);
     if (!checkComment)
@@ -76,6 +82,7 @@ export const deleteCommentById = async (req, res, next) => {
 
 export const approveComment = async (req, res, next) => {
   try {
+    await connectDB();
     const { id } = req.body;
     const approvedComment = await Comment.findById(id);
     if (!approvedComment)
